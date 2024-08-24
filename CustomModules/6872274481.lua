@@ -9196,3 +9196,19 @@ run(function()
         end
 	})
 end)
+InfiniteJump = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+        Name = "InfiniteJump",
+        Function = function(callback)
+            if callback then
+                game:GetService("UserInputService").JumpRequest:Connect(function()
+                    local localPlayer = game:GetService("Players").LocalPlayer
+                    local character = localPlayer.Character
+                    if character and character:FindFirstChildOfClass("Humanoid") then
+                        local humanoid = character:FindFirstChildOfClass("Humanoid")
+                        humanoid:ChangeState("Jumping")
+                    end
+                end)
+            end
+        end,
+        HoverText = "Enables infinite jump"
+    })
