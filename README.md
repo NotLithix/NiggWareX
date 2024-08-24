@@ -1,2 +1,2 @@
-# Vape V4
+# Vape Trash
 rewrite soon :tm:
