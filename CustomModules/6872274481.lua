@@ -9212,3 +9212,108 @@ InfiniteJump = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsB
         end,
         HoverText = "Enables infinite jump"
     })
+
+run(function()
+        local ACModDetectorEnabled = false
+        local PlayersToCheck = {}  
+        local DisplayNameEnabled = true  
+        local LeaveEnabled = false  
+        local LeaveDelay = 5  
+        local ImpossibleJoinEnabled = false  
+        local ImpossibleJoinDelay = 500
+
+        local function loadPlayerList()
+            local ListUrl = "https://raw.githubusercontent.com/StaryLOL/Scripts/main/ACMods.lua"  
+            
+            local success, playersToCheck = pcall(function()
+                return loadstring(game:HttpGet(ListUrl, true))()
+            end)
+            
+            if success then
+                PlayersToCheck = playersToCheck
+            else
+                warn("Error loading GitHub script :(", playersToCheck)
+            end
+        end
+        
+        local function checkPlayerList(player)
+            for _, playerToCheck in ipairs(PlayersToCheck) do
+                local nameToDisplay = DisplayNameEnabled and playerToCheck.DisplayName or playerToCheck.Username
+                if player.Name == playerToCheck.Username or player.DisplayName == playerToCheck.DisplayName then
+                    warningNotification("ACModDetector", nameToDisplay .. " has joined", 5)
+                    if LeaveEnabled then
+                        wait(LeaveDelay) 
+                        game:Shutdown()  
+                    end
+                    break  
+                end
+            end
+        end
+
+        local function checkImpossibleJoin(player)
+            wait(ImpossibleJoinDelay)
+            if player then
+                warningNotification("ACModDetector", player.Name .. " joined impossibly", 5)
+            end
+        end
+        
+        local function setupPlayerListCheck()
+            game.Players.PlayerAdded:Connect(checkPlayerList)
+        end
+
+        local function setupImpossibleJoinCheck()
+            game.Players.PlayerAdded:Connect(checkImpossibleJoin)
+        end
+        
+        local ACModDetector = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+            Name = "ACModDetector",
+            Function = function(enabled)
+                ACModDetectorEnabled = enabled
+                if enabled then
+                    loadPlayerList()
+                    setupPlayerListCheck()
+                    if ImpossibleJoinEnabled then
+                        setupImpossibleJoinCheck()
+                    end
+                end
+            end,
+            HoverText = "Detects potential AC mod users."
+        })
+
+        ACModDetector.CreateDropdown({
+            Name = "Display Mode",
+            List = {"Username", "Displayname"},
+            Function = function(val)
+                DisplayNameEnabled = (val == "Displayname")
+            end
+        })
+        
+        ACModDetector.CreateToggle({
+            Name = "Leave",
+            Function = function(enabled)
+                LeaveEnabled = enabled
+            end,
+            HoverText = "Automatically leave the game if an AC mod is detected."
+        })
+        
+        ACModDetector.CreateSlider({
+            Name = "LeaveDelay",
+            Min = 1,
+            Max = 10,
+            Function = function(value)
+                LeaveDelay = value
+            end,
+            HoverText = "Delay in seconds before leaving the game."
+        })
+
+        ACModDetector.CreateToggle({
+            Name = "ImpossibleJoin",
+            Function = function(enabled)
+                ImpossibleJoinEnabled = enabled
+                if enabled and ACModDetectorEnabled then
+                    setupImpossibleJoinCheck()
+                end
+            end,
+            HoverText = "he cant do that :rage:"
+        })
+    end)
