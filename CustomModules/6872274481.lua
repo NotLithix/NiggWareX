@@ -8825,8 +8825,10 @@ run(function()
         Name = "FakeHealthV2",
         Function = function(callback) 
             if callback then
-                lplr.Character:FindFirstChildWhichIsA("Humanoid").MaxHealth = health.Value or 100
-                lplr.Character:FindFirstChildWhichIsA("Humanoid").Health = lplr.Character:FindFirstChildWhichIsA("Humanoid").MaxHealth
+		repeat task.wait()
+	                lplr.Character:FindFirstChildWhichIsA("Humanoid").MaxHealth = health.Value or 100
+	                lplr.Character:FindFirstChildWhichIsA("Humanoid").Health = lplr.Character:FindFirstChildWhichIsA("Humanoid").MaxHealth
+		until not fakehealth.Enabled
             end
         end,
         HoverText = 'Displays a fake health when module "Health" is enabled.'
