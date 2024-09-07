@@ -1731,7 +1731,7 @@ GUISettings.CreateToggle({
 	Name = "Blur Background", 
 	Function = function(callback) 
 		GuiLibrary.MainBlur.Size = (callback and 25 or 0) 
-		--game:GetService("RunService"):SetRobloxGuiFocused(GuiLibrary.MainGui.ScaledGui.ClickGui.Visible and callback) 
+		game:GetService("RunService"):SetRobloxGuiFocused(GuiLibrary.MainGui.ScaledGui.ClickGui.Visible and callback) 
 	end,
 	Default = true,
 	HoverText = "Blur the background of the GUI"
@@ -1869,7 +1869,7 @@ GuiLibrary.SelfDestruct = function()
 	end
 	teleportConnection:Disconnect()
 	GuiLibrary.MainGui:Destroy()
-	--game:GetService("RunService"):SetRobloxGuiFocused(false)	
+	game:GetService("RunService"):SetRobloxGuiFocused(false)	
 end
 
 GeneralSettings.CreateButton2({
