@@ -351,7 +351,7 @@ GUI.CreateButton({
 })
 GUI.CreateButton({
     Name = "EasyWare",
-    Function = function() EasyWare.SetVisible(callback) end,
+    Function = function(callback) EasyWare.SetVisible(callback) end,
     Icon = "vape/assets/RenderIcon.png",
     IconSize = 17
 })
