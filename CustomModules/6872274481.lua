@@ -8825,8 +8825,10 @@ run(function()
         Name = "FakeHealthV2",
         Function = function(callback) 
             if callback then
-                lplr.Character:FindFirstChildWhichIsA("Humanoid").MaxHealth = health.Value or 100
-                lplr.Character:FindFirstChildWhichIsA("Humanoid").Health = lplr.Character:FindFirstChildWhichIsA("Humanoid").MaxHealth
+                repeat task.wait()
+                    lplr.Character:FindFirstChildWhichIsA("Humanoid").MaxHealth = health.Value or 100
+                    lplr.Character:FindFirstChildWhichIsA("Humanoid").Health = lplr.Character:FindFirstChildWhichIsA("Humanoid").MaxHealth
+                until not fakehealth.Enabled
             else
                 lplr.Character:FindFirstChildWhichIsA("Humanoid").MaxHealth = 100
                 lplr.Character:FindFirstChildWhichIsA("Humanoid").Health = 100
