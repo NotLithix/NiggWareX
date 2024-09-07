@@ -8817,6 +8817,31 @@ run(function()
     })
 end)
 
+run(function() 
+    local fakehealth = {Enabled = false}
+    local health = {Value = 100}
+
+    fakehealth = GuiLibrary.ObjectsThatCanBeSaved.EasyWareWindow.Api.CreateOptionsButton({
+        Name = "FakeHealthV2",
+        Function = function(callback) 
+            if callback then
+                lplr.Character:FindFirstChildWhichIsA("Humanoid").MaxHealth = health.Value or 100
+                lplr.Character:FindFirstChildWhichIsA("Humanoid").Health = lplr.Character:FindFirstChildWhichIsA("Humanoid").MaxHealth
+            end
+        end,
+        HoverText = 'Displays a fake health when module "Health" is enabled.'
+    })
+
+    health = fakehealth.CreateSlider({
+        Name = "Health",
+        Min = 1,
+        Max = 100000,
+        Function = function(val) end,
+        Default = 100,
+        HoverText = "The amount of health to display."
+    })
+end)
+
 run(function()
 	store.TPString = shared.vapeoverlay or nil
 	local origtpstring = store.TPString
