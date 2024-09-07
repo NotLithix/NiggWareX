@@ -1,2 +1,1 @@
-# Vape V4
-rewrite soon :tm:
+# Vape V4 for EasyWare
