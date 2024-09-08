@@ -1761,7 +1761,7 @@ runcode(function()
     })
 end)
 
-runcode(function() 
+--[[runcode(function() 
     local success, fail = pcall(function()
         local ACModDetector = {Enabled = false}
         local AutoLeave = {Enabled = false}
@@ -1838,7 +1838,7 @@ runcode(function()
     if fail and fail ~= nil then
         createwarning("EasyWare: Error Detected.", fail, 5)
     end
-end)
+end)]]
 
 runcode(function()
 	local tpstring = shared.vapeoverlay or nil
