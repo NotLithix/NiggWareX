@@ -8948,6 +8948,27 @@ run(function()
 end)
 
 run(function()
+    local HighlightColor = {Enabled = false}
+    local Color = {Hue = 1, Sat = 1, Value = 1}
+
+    HighlightColor = GuiLibrary.ObjectsThatCanBeSaved.EasyWareWindow.Api.CreateOptionsButton({
+        Name = "DamageHighlightColor",
+        Function = function(callback) 
+            if callback then
+                repeat task.wait()
+                    lplr.Character:FindFirstChildOfClass("Highlight").FillColor = Color3.fromHSV(Color.Hue, Color.Sat, Color.Value)
+                until not HighlightColor.Enabled
+            end
+        end,
+    })
+
+    Color = HighlightColor.CreateColorSlider({
+        Name = "Color",
+        Function = function(Hue, Sat, Value) end
+    })
+end)
+
+run(function()
 	store.TPString = shared.vapeoverlay or nil
 	local origtpstring = store.TPString
 	local Overlay = GuiLibrary.CreateCustomWindow({
