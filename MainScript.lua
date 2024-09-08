@@ -1,4 +1,5 @@
 --This watermark is used to delete the file if its cached, remove it to make the file persist after commits.
+--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.
 repeat task.wait() until game:IsLoaded()
 local GuiLibrary
 local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
@@ -1995,6 +1996,15 @@ local function loadVape()
 			end)
 		end
 		GuiLibrary.LoadedAnimation(welcomeMessage.Enabled)
+		function InfoNotification(title, text, delay)
+			local suc, res = pcall(function()
+				local frame = GuiLibrary.CreateNotification(title, text, delay, "assets/InfoNotification.png")
+				frame.Frame.Frame.ImageColor3 = Color3.fromRGB(255,255,255)
+				return frame
+			end)
+			return (suc and res)
+		end
+		InfoNotification("Vape", "Please note that you have injected a 'mod' for vape. If you want to get rid of this notification, disable 'vape mod note' in Gui Settings.", 10)
 	else
 		shared.VapeSwitchServers = nil
 	end
