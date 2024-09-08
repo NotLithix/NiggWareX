@@ -1,3 +1,4 @@
+--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.
 repeat task.wait() until game:IsLoaded()
 local GuiLibrary
 local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
@@ -1955,6 +1956,17 @@ GeneralSettings.CreateButton2({
 	Name = "DESTROY",
 	Function = GuiLibrary.SelfDestruct
 })
+GeneralSettings.CreateButton2({
+	Name = "HARD DESTROY",
+	Function = function() 
+		if delfolder then
+			delfolder("vape")
+			GuiLibrary.SelfDestruct()
+		else
+			InfoNotification("Vape", "Your Exploit does not support delfolder.", 10)
+		end
+	end
+})
 
 local function loadVape()
 	if not shared.VapeIndependent then
@@ -2008,7 +2020,7 @@ local function loadVape()
 			end)
 			return (suc and res)
 		end
-		if vapemodnote then
+		if vapemodnote.Enabled then
 			InfoNotification("Vape", "Please note that you have injected a 'mod' for vape. If you want to get rid of this notification, disable 'vape mod note' in Gui Settings.", 10)
 		end
 	else
