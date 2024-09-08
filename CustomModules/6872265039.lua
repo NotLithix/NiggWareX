@@ -1761,6 +1761,80 @@ runcode(function()
     })
 end)
 
+runcode(function() 
+    local ACModDetector = {Enabled = false}
+    local AutoLeave = {Enabled = false}
+    local KnownPlayers
+    
+    
+    local function Players()
+        local success, fail = pcall(function()
+            return loadstring(game:HttpGet("https://raw.githubusercontent.com/EasyWarePGN/AcMods.lua/main/EasyWare", true))()
+        end)
+
+        if success then
+            KnownPlayers = fail
+        else
+            warn("Error loading GitHub script :(", fail ~= nil)
+        end
+        return fail
+    end
+    
+    local function FullCheck() 
+        for _, player in pairs(game.Players:GetPlayers()) do
+            for _, v in pairs(KnownPlayers) do
+                if player.Name == v.Username or player.DisplayName == v.DisplayName then
+                    warningNotification("ACModDetector", v.DisplayName .. " has joined", 35)
+                    if AutoLeave.Enabled then
+                        task.wait()
+                        game.Players.LocalPlayer:Kick("Mod Detected.")
+                        --game:Shutdown()
+                    end
+                end
+            end
+        end
+    end
+    
+    local function impossiblejoin() 
+        for _, player in pairs(game.Players:GetPlayers()) do
+            task.wait(500)
+            if player then
+                if player then
+                    warningNotification("ACModDetector", player.Name .. " joined impossibly", 5)
+                    if AutoLeave.Enabled then
+                        lplr:Kick("Impossible join frfr")
+                    end
+                end
+            end
+        end
+    end
+    
+    
+    
+    ACModDetector = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+        Name = "BetterACModDetector",
+        Function = function(callback) 
+            if callback then
+                Players()
+                FullCheck()
+                impossiblejoin()
+                RunLoops:BindToHeartbeat("FullCheck", FullCheck)
+                RunLoops:BindToHeartbeat("ImpossibleJoin", impossiblejoin)
+            else
+                RunLoops:UnbindFromHeartbeat("FullCheck")
+                RunLoops:UnBindFromHeartbeat("ImpossibleJoin")
+            end
+        end,
+        HoverText = "Detects potential AC mod users."
+    })
+    
+    AutoLeave = ACModDetector.CreateToggle({
+        Name = "AutoLeave",
+        Function = function(callback) end,
+        HoverText = "he cant do that 😡"
+    })
+end)
+
 runcode(function()
 	local tpstring = shared.vapeoverlay or nil
 	local origtpstring = tpstring
