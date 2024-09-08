@@ -1,1 +1,1 @@
-# Best Vape Mod EasyWare ™️
+# EasyWare :tm:
