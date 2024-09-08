@@ -1869,7 +1869,7 @@ runcode(function()
                 game:GetService("Lighting"):GetChildren()[4].Sound.Volume = 10
             else
                 game:GetService("Lighting"):GetChildren()[4].Sound.PlaybackSpeed = 1
-                game:GetService("Lighting"):GetChildren()[4].Sound.Volume = 6
+                game:GetService("Lighting"):GetChildren()[4].Sound.Volume = 3
             end
         end
     })
