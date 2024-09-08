@@ -1859,6 +1859,23 @@ runcode(function()
 end)
 
 runcode(function()
+    local crazyMusic = {Enabled = false}
+
+    crazyMusic = GuiLibrary.ObjectsThatCanBeSaved.EasyWareWindow.Api.CreateOptionsButton({
+        Name = "CrazyMusic",
+        Function = function(callback) 
+            if callback then 
+                game:GetService("Lighting"):GetChildren()[4].Sound.PlaybackSpeed = 2
+                game:GetService("Lighting"):GetChildren()[4].Sound.Volume = 10
+            else
+                game:GetService("Lighting"):GetChildren()[4].Sound.PlaybackSpeed = 1
+                game:GetService("Lighting"):GetChildren()[4].Sound.Volume = 6
+            end
+        end
+    })
+end)
+
+runcode(function()
 	local tpstring = shared.vapeoverlay or nil
 	local origtpstring = tpstring
 	local Overlay = GuiLibrary.CreateCustomWindow({
