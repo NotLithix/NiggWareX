@@ -8849,7 +8849,7 @@ run(function()
     })
 end)
 
-run(function() 
+--[[run(function() 
     local success, fail = pcall(function()
         local ACModDetector = {Enabled = false}
         local AutoLeave = {Enabled = false}
@@ -8926,7 +8926,7 @@ run(function()
     if fail and fail ~= nil then
         createwarning("EasyWare: Error Detected.", fail, 5)
     end
-end)
+end)]]
 
 run(function()
 	store.TPString = shared.vapeoverlay or nil
