@@ -1,5 +1,4 @@
 --This watermark is used to delete the file if its cached, remove it to make the file persist after commits.
---This watermark is used to delete the file if its cached, remove it to make the file persist after commits.
 repeat task.wait() until game:IsLoaded()
 local GuiLibrary
 local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
@@ -1744,6 +1743,12 @@ local welcomeMessage = GUISettings.CreateToggle({
 	Default = true,
 	HoverText = 'Displays a message indicating your GUI keybind upon injecting.\nI.E "Press RIGHTSHIFT to open GUI"'
 })
+local vapemodnote = GUISettings.CreateToggle({
+	Name = "Vape Mod Note",
+	Function = function() end,
+	Default = true,
+	HoverText = 'Displays a message indicating that this is a vape mod.'
+})
 GUISettings.CreateToggle({
 	Name = "Old Rainbow", 
 	Function = function(callback) oldrainbow = callback end,
@@ -1948,7 +1953,7 @@ GUISettings.CreateButton2({
 	end
 })
 GeneralSettings.CreateButton2({
-	Name = "UNINJECT",
+	Name = "DESTROY",
 	Function = GuiLibrary.SelfDestruct
 })
 
@@ -2004,7 +2009,9 @@ local function loadVape()
 			end)
 			return (suc and res)
 		end
-		InfoNotification("Vape", "Please note that you have injected a 'mod' for vape. If you want to get rid of this notification, disable 'vape mod note' in Gui Settings.", 10)
+		if vapemodnote then
+			InfoNotification("Vape", "Please note that you have injected a 'mod' for vape. If you want to get rid of this notification, disable 'vape mod note' in Gui Settings.", 10)
+		end
 	else
 		shared.VapeSwitchServers = nil
 	end
