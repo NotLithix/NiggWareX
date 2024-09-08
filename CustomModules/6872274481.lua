@@ -8931,6 +8931,24 @@ end)
 end)]]
 
 run(function()
+    local infiniteYield = {Enabled = false}
+    local enabled = false
+
+    infiniteYield = GuiLibrary.ObjectsThatCanBeSaved.EasyWareWindow.Api.CreateOptionsButton({
+        Name = "InfiniteYield",
+        Function = function(callback) 
+            if callback and enabled ~= true then
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+                infiniteYield.ToggleButton(true)
+                enabled = true
+            else
+                createwarning("EasyWare", "Infinite Yield already injected!", 5)
+            end
+        end,
+    })
+end)
+
+run(function()
 	store.TPString = shared.vapeoverlay or nil
 	local origtpstring = store.TPString
 	local Overlay = GuiLibrary.CreateCustomWindow({
