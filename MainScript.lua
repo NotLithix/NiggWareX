@@ -1,3 +1,4 @@
+--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.
 repeat task.wait() until game:IsLoaded()
 local GuiLibrary
 local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
@@ -278,9 +279,9 @@ local Combat = GuiLibrary.CreateWindow({
 	Icon = "vape/assets/CombatIcon.png", 
 	IconSize = 15
 })
-local Blatant = GuiLibrary.CreateWindow({
-	Name = "Blatant", 
-	Icon = "vape/assets/BlatantIcon.png", 
+local World = GuiLibrary.CreateWindow({
+	Name = "World", 
+	Icon = "vape/assets/WorldIcon.png", 
 	IconSize = 16
 })
 local Render = GuiLibrary.CreateWindow({
@@ -293,9 +294,9 @@ local Utility = GuiLibrary.CreateWindow({
 	Icon = "vape/assets/UtilityIcon.png", 
 	IconSize = 17
 })
-local World = GuiLibrary.CreateWindow({
-	Name = "World", 
-	Icon = "vape/assets/WorldIcon.png", 
+local Blatant = GuiLibrary.CreateWindow({
+	Name = "Blatant", 
+	Icon = "vape/assets/BlatantIcon.png", 
 	IconSize = 16
 })
 local EasyWare = GuiLibrary.CreateWindow({
@@ -326,9 +327,9 @@ GUI.CreateButton({
 	IconSize = 15
 })
 GUI.CreateButton({
-	Name = "Blatant", 
-	Function = function(callback) Blatant.SetVisible(callback) end, 
-	Icon = "vape/assets/BlatantIcon.png", 
+	Name = "World", 
+	Function = function(callback) World.SetVisible(callback) end, 
+	Icon = "vape/assets/WorldIcon.png", 
 	IconSize = 16
 })
 GUI.CreateButton({
@@ -344,9 +345,9 @@ GUI.CreateButton({
 	IconSize = 17
 })
 GUI.CreateButton({
-	Name = "World", 
-	Function = function(callback) World.SetVisible(callback) end, 
-	Icon = "vape/assets/WorldIcon.png", 
+	Name = "Blatant", 
+	Function = function(callback) Blatant.SetVisible(callback) end, 
+	Icon = "vape/assets/BlatantIcon.png", 
 	IconSize = 16
 })
 GUI.CreateButton({
@@ -1580,16 +1581,16 @@ local BlatantModeToggle = GUI.CreateToggle({
 })
 local windowSortOrder = {
 	CombatButton = 1,
-	BlatantButton = 2,
+	WorldButton = 2,
 	RenderButton = 3,
 	UtilityButton = 4,
-	WorldButton = 5,
+	BlatantButton = 5,
     EasyWareButton = 6,
 	FriendsButton = 7,
 	TargetsButton = 8,
 	ProfilesButton = 9
 }
-local windowSortOrder2 = {"Combat", "Blatant", "Render", "Utility", "World", "EasyWare"}
+local windowSortOrder2 = {"Combat", "World", "Render", "Utility", "Blatant", "EasyWare"}
 
 local function getVapeSaturation(val)
 	local sat = 0.9
@@ -1906,10 +1907,10 @@ GUISettings.CreateButton2({
 		local sortordertable = {
 			GUIWindow = 1,
 			CombatWindow = 2,
-			BlatantWindow = 3,
+			WorldWindow = 3,
 			RenderWindow = 4,
 			UtilityWindow = 5,
-			WorldWindow = 6,
+			BlatantWindow = 6,
             EasyWareWindow = 7,
 			FriendsWindow = 8,
 			TargetsWindow = 9,
