@@ -8956,7 +8956,9 @@ run(function()
         Function = function(callback) 
             if callback then
                 repeat task.wait()
-                    lplr.Character:FindFirstChildOfClass("Highlight").FillColor = Color3.fromHSV(Color.Hue, Color.Sat, Color.Value)
+                    if lplr.Character then
+                        lplr.Character:FindFirstChildOfClass("Highlight").FillColor = Color3.fromHSV(Color.Hue, Color.Sat, Color.Value)
+                    end
                 until not HighlightColor.Enabled
             end
         end,
