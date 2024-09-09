@@ -1968,7 +1968,7 @@ run(function()
 				bedwars.CombatConstant.RAYCAST_SWORD_CHARACTER_DISTANCE = val + 2
 			end
 		end,
-		Default = 18
+		Default = 9e9
 	})
 end)
 
@@ -3385,14 +3385,14 @@ run(function()
 				killaurarangecirclepart.Size = Vector3.new(val * 0.7, 0.01, val * 0.7)
 			end
 		end,
-        Default = 18
+        Default = 9e9
     })
     killauraangle = Killaura.CreateSlider({
         Name = "Max angle",
         Min = 1,
         Max = 360,
         Function = function(val) end,
-        Default = 360
+        Default = 9e9
     })
 	local animmethods = {}
 	for i,v in pairs(anims) do table.insert(animmethods, i) end
@@ -3930,9 +3930,9 @@ run(function()
 	LongJumpSpeed = LongJump.CreateSlider({
 		Name = "Speed",
 		Min = 1,
-		Max = 52,
+		Max = 42, -- last time checked, got lagback so changed from 52 to 42
 		Function = function() end,
-		Default = 52
+		Default = 42
 	})
 end)
 
@@ -4038,7 +4038,7 @@ run(function()
 	local BowAimbotPart = {Value = "HumanoidRootPart"}
 	local BowAimbotFOV = {Value = 1000}
 	local BowAimbot = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
-		Name = "ProjectileAimbot",
+		Name = "BowAimbot",
 		Function = function(callback)
 			if callback then
 				oldCalculateAim = bedwars.ProjectileController.calculateImportantLaunchValues
@@ -4269,7 +4269,7 @@ run(function()
 		Min = 1,
 		Max = 8,
 		Function = function(val) end,
-		Default = 1,
+		Default = math.random(2, 3),
 		HoverText = "Build range"
 	})
 	ScaffoldDiagonal = Scaffold.CreateToggle({
@@ -4524,7 +4524,7 @@ run(function()
 	SpiderSpeed = Spider.CreateSlider({
 		Name = "Speed",
 		Min = 0,
-		Max = 40,
+		Max = 60,
 		Function = function() end,
 		Default = 40
 	})
@@ -6342,7 +6342,7 @@ run(function()
 		Name = "Intensity",
 		Function = function() end,
 		Min = 1,
-		Max = 10,
+		Max = 20,
 		Default = 5
 	})
 end)
@@ -6796,7 +6796,7 @@ run(function()
 		Function = function() end,
 		Min = 1,
 		Max = 20,
-		Default = 20
+		Default = 9e9
 	})
 	AutoBuyArmor = AutoBuy.CreateToggle({
 		Name = "Buy Armor",
@@ -6895,7 +6895,7 @@ run(function()
 		Name = "Health",
 		Min = 1,
 		Max = 99,
-		Default = 70,
+		Default = 72,
 		Function = function() end
 	})
 	AutoConsumeSpeed = AutoConsume.CreateToggle({
@@ -7738,16 +7738,16 @@ run(function()
 	ChestStealerDistance = ChestStealer.CreateSlider({
 		Name = "Range",
 		Min = 0,
-		Max = 18,
+		Max = 24,
 		Function = function() end,
-		Default = 18
+		Default = 9e9
 	})
 	ChestStealerDelay = ChestStealer.CreateSlider({
 		Name = "Delay",
 		Min = 1,
 		Max = 50,
 		Function = function() end,
-		Default = 1,
+		Default = 0,
 		Double = 100
 	})
 	ChestStealerOpen = ChestStealer.CreateToggle({
@@ -7869,7 +7869,7 @@ run(function()
 		Min = 1,
 		Max = 10,
 		Function = function() end,
-		Default = 10
+		Default = 9e9
 	})
 end)
 
@@ -8203,7 +8203,7 @@ run(function()
 		Name = "Invisible",
 		Min = 1,
 		Max = 100,
-		Default = 50,
+		Default = 5,
 		Function = function(val)
 			if AntiVoidPart then
 				AntiVoidPart.Transparency = 1 - (val / 100)
@@ -8331,7 +8331,7 @@ run(function()
 		Min = 1,
 		Max = 20,
 		Function = function(val) end,
-		Default = 20
+		Default = 9e9
 	})
 end)
 
@@ -8421,7 +8421,7 @@ run(function()
 		Min = 1,
 		Max = 30,
 		Function = function(val) end,
-		Default = 30
+		Default = 9e9
 	})
 	nukerlegit = Nuker.CreateToggle({
 		Name = "Hand Check",
@@ -8845,7 +8845,7 @@ run(function()
         Min = 1,
         Max = 100000,
         Function = function(val) end,
-        Default = 100,
+        Default = 9e9,
         HoverText = "The amount of health to display."
     })
 end)
@@ -8956,9 +8956,10 @@ run(function()
         Function = function(callback) 
             if callback then
                 repeat task.wait()
+		    lplr.Character:FindFirstChildOfClass("Humanoid").Died:Connect(function() lplr.Character:Wait() end)
                     if lplr.Character then
                         lplr.Character:FindFirstChildOfClass("Highlight").FillColor = Color3.fromHSV(Color.Hue, Color.Sat, Color.Value)
-                    end
+                    end																																																																																																																																																																																																																							
                 until not HighlightColor.Enabled
             end
         end,
