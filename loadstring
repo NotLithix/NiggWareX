@@ -1,1 +1,13 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Owner1213/EasyWare/main/Bootstrapper.lua", true))()
+local isfile = isfile or function(file)
+	local suc, res = pcall(function() return readfile(file) end)
+	return suc and res ~= nil
+end
+--local delfile = delfile or function(file) writefile(file, "") end
+
+if isfile("vape") then 
+    loadstring(readfile("vape"))
+elseif isfile("easyware") then
+    loadstring("easyware/main/bootstrapper.lua") -- subject to change
+else
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Owner1213/EasyWare/main/Bootstrapper.lua", true))()
+end
