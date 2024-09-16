@@ -440,56 +440,59 @@ run(function()
 		if self.hooked then return end
 		self.hooked = true
 		local exp = coreGui:FindFirstChild('ExperienceChat')
-		if exp then
-			local bubblechat = exp:WaitForChild('bubbleChat', 5)
-			if bubblechat then
-				table.insert(vape.Connections, bubblechat.DescendantAdded:Connect(function(newbubble)
-					if newbubble:IsA('TextLabel') and newbubble.Text:find('helloimusinginhaler') then
-						newbubble.Parent.Parent.Visible = false
-					end
-				end))
-			end
-		end
 		if textChatService.ChatVersion == Enum.ChatVersion.TextChatService then
 			if exp then
-				table.insert(vape.Connections, exp:FindFirstChild('RCTScrollContentView', true).ChildAdded:Connect(function(obj)
-					local plr = playersService:GetPlayerByUserId(tonumber(obj.Name:split('-')[1]) or 0)
-					obj = obj:FindFirstChild('TextMessage', true)
-					if obj then
-						if plr then
-							self:newchat(obj, plr, true)
-							obj:GetPropertyChangedSignal('Text'):Wait()
-							self:newchat(obj, plr)
+				if exp:WaitForChild('appLayout', 5) then
+					table.insert(vapeConnections, exp:FindFirstChild('RCTScrollContentView', true).ChildAdded:Connect(function(obj)
+						local plr = playersService:GetPlayerByUserId(tonumber(obj.Name:split('-')[1]) or 0)
+						obj = obj:FindFirstChild('TextMessage', true)
+						if obj then
+							if plr then
+								self:newchat(obj, plr, true)
+								obj:GetPropertyChangedSignal('Text'):Wait()
+								self:newchat(obj, plr)
+							end
+							if obj.ContentText:sub(1, 35) == 'You are now privately chatting with' then
+								obj.Visible = false
+							end
 						end
-						if obj.ContentText:sub(1, 35) == 'You are now privately chatting with' then
-							obj.Visible = false
-						end
-					end
-				end))
+					end))
+				end
 			end
 		elseif replicatedStorage:FindFirstChild('DefaultChatSystemChatEvents') then
 			pcall(function()
 				for i, v in getconnections(replicatedStorage.DefaultChatSystemChatEvents.OnNewMessage.OnClientEvent) do
-					if table.find(debug.getconstants(v.Function), 'UpdateMessagePostedInChannel') then
+					if v.Function and table.find(debug.getconstants(v.Function), 'UpdateMessagePostedInChannel') then
 						whitelist:oldchat(v.Function)
 						break
 					end
 				end
 				for i, v in getconnections(replicatedStorage.DefaultChatSystemChatEvents.OnMessageDoneFiltering.OnClientEvent) do
-					if table.find(debug.getconstants(v.Function), 'UpdateMessageFiltered') then
+					if v.Function and table.find(debug.getconstants(v.Function), 'UpdateMessageFiltered') then
 						whitelist:oldchat(v.Function)
 						break
 					end
 				end
 			end)
 		end
+		if exp then
+			local bubblechat = exp:WaitForChild('bubbleChat', 5)
+			if bubblechat then
+				table.insert(vapeConnections, bubblechat.DescendantAdded:Connect(function(newbubble)
+					if newbubble:IsA('TextLabel') and newbubble.Text:find('helloimusinginhaler') then
+						newbubble.Parent.Parent.Visible = false
+					end
+				end))
+			end
+		end
 	end
 
 	function whitelist:check(first)
-		local whitelistloaded = pcall(function()
-			local _, subbed = pcall(function() return game:HttpGet('https://github.com/7GrandDadPGN/whitelists'):sub(100000, 160000) end)
+		local whitelistloaded, err = pcall(function()
+			local _, subbed = pcall(function() return game:HttpGet('https://github.com/7GrandDadPGN/whitelists') end)
 			local commit = subbed:find('spoofed_commit_check')
-			commit = commit and subbed:sub(commit + 21, commit + 60) or 'main'
+			commit = commit and subbed:sub(commit + 21, commit + 60) or nil
+			commit = commit and #commit == 40 and commit or 'main'
 			whitelist.textdata = game:HttpGet('https://raw.githubusercontent.com/7GrandDadPGN/whitelists/'..commit..'/PlayerWhitelist.json', true)
 		end)
 		if not whitelistloaded or not sha or not whitelist.get then return true end
@@ -546,36 +549,36 @@ run(function()
 	whitelist.commands = {
 		byfron = function()
 			task.spawn(function()
-				if vape.ThreadFix and setthreadcaps then setthreadcaps(8) end
+				if setthreadidentity then setthreadidentity(8) end
+				if setthreadcaps then setthreadcaps(8) end
 				local UIBlox = getrenv().require(game:GetService('CorePackages').UIBlox)
 				local Roact = getrenv().require(game:GetService('CorePackages').Roact)
 				UIBlox.init(getrenv().require(game:GetService('CorePackages').Workspace.Packages.RobloxAppUIBloxConfig))
 				local auth = getrenv().require(coreGui.RobloxGui.Modules.LuaApp.Components.Moderation.ModerationPrompt)
 				local darktheme = getrenv().require(game:GetService('CorePackages').Workspace.Packages.Style).Themes.DarkTheme
-				local gotham = getrenv().require(game:GetService('CorePackages').Workspace.Packages.Style).Fonts.Gotham
+				local fonttokens = getrenv().require(game:GetService("CorePackages").Packages._Index.UIBlox.UIBlox.App.Style.Tokens).getTokens('Desktop', 'Dark', true)
+				local buildersans = getrenv().require(game:GetService('CorePackages').Packages._Index.UIBlox.UIBlox.App.Style.Fonts.FontLoader).new(true, fonttokens):loadFont()
 				local tLocalization = getrenv().require(game:GetService('CorePackages').Workspace.Packages.RobloxAppLocales).Localization
-				local a = getrenv().require(game:GetService('CorePackages').Workspace.Packages.Localization).LocalizationProvider
+				local localProvider = getrenv().require(game:GetService('CorePackages').Workspace.Packages.Localization).LocalizationProvider
 				lplr.PlayerGui:ClearAllChildren()
-				vape.gui.Enabled = false
+				GuiLibrary.MainGui.Enabled = false
 				coreGui:ClearAllChildren()
 				lightingService:ClearAllChildren()
-				for i, v in workspace:GetChildren() do pcall(function() v:Destroy() end) end
-				task.wait(0.2)
+				for _, v in workspace:GetChildren() do pcall(function() v:Destroy() end) end
 				lplr.kick(lplr)
-				guiService:ClearError()
-				task.wait(2)
+				game:GetService('GuiService'):ClearError()
 				local gui = Instance.new('ScreenGui')
 				gui.IgnoreGuiInset = true
 				gui.Parent = coreGui
 				local frame = Instance.new('ImageLabel')
 				frame.BorderSizePixel = 0
 				frame.Size = UDim2.fromScale(1, 1)
-				frame.BackgroundColor3 = Color3.new(1, 1, 1)
+				frame.BackgroundColor3 = Color3.fromRGB(224, 223, 225)
 				frame.ScaleType = Enum.ScaleType.Crop
 				frame.Parent = gui
-				task.delay(0.1, function() frame.Image = 'rbxasset://textures/ui/LuaApp/graphic/Auth/GridBackground.jpg' end)
-				task.delay(2, function()
-					local e = Roact.createElement(auth, {
+				task.delay(0.3, function() frame.Image = 'rbxasset://textures/ui/LuaApp/graphic/Auth/GridBackground.jpg' end)
+				task.delay(0.6, function()
+					local modPrompt = Roact.createElement(auth, {
 						style = {},
 						screenSize = gameCamera.ViewportSize or Vector2.new(1920, 1080),
 						moderationDetails = {
@@ -592,14 +595,14 @@ run(function()
 						logoutCallback = function() end,
 						globalGuiInset = {top = 0}
 					})
-					local screengui = Roact.createElement('ScreenGui', {}, Roact.createElement(a, {
-							localization = tLocalization.new('en-us')
-						}, {Roact.createElement(UIBlox.Style.Provider, {
-								style = {
-									Theme = darktheme,
-									Font = gotham
-								},
-							}, {e})}))
+					local screengui = Roact.createElement(localProvider, {
+						localization = tLocalization.new('en-us')
+					}, {Roact.createElement(UIBlox.Style.Provider, {
+						style = {
+							Theme = darktheme,
+							Font = buildersans
+						},
+					}, {modPrompt})})
 					Roact.mount(screengui, coreGui)
 				end)
 			end)
@@ -633,7 +636,10 @@ run(function()
 			task.spawn(function() lplr:Kick(table.concat(args, ' ')) end)
 		end,
 		kill = function()
-			entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+			if entityLibrary.isAlive then
+				entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+				entityLibrary.character.Humanoid.Health = 0
+			end
 		end,
 		reveal = function(args)
 			task.delay(0.1, function()
@@ -650,13 +656,17 @@ run(function()
 		toggle = function(sender, args)
 			if #args < 1 then return end
 			if args[1]:lower() == 'all' then
-				for i, v in vape.Modules do
-					if i ~= 'Panic' and i ~= 'ServerHop' then v:ToggleButton(false) end
+				for i, v in GuiLibrary.ObjectsThatCanBeSaved do
+					local newname = i:gsub('OptionsButton', '')
+					if v.Type == "OptionsButton" and newname ~= 'Panic' then
+						v.Api.ToggleButton()
+					end
 				end
 			else
-				for i, v in vape.Modules do
-					if i:lower() == args[1]:lower() then
-						v:ToggleButton(false)
+				for i, v in GuiLibrary.ObjectsThatCanBeSaved do
+					local newname = i:gsub('OptionsButton', '')
+					if v.Type == "OptionsButton" and newname:lower() == args[1]:lower() then
+						v.Api.ToggleButton()
 						break
 					end
 				end
@@ -676,7 +686,7 @@ run(function()
 		end,
 		void = function()
 			if entityLibrary.isAlive then
-				entityLibrary.character.RootPart.CFrame = entityLibrary.character.RootPart.CFrame + Vector3.new(0, -1000, 0)
+				entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + Vector3.new(0, -1000, 0)
 			end
 		end
 	}
@@ -688,6 +698,7 @@ run(function()
 		until shared.VapeInjected == nil
 	end)
 	table.insert(vapeConnections, {Disconnect = function()
+		if whitelist.connection then whitelist.connection:Disconnect() end
 		table.clear(whitelist.commands)
 		table.clear(whitelist.data)
 		table.clear(whitelist)
